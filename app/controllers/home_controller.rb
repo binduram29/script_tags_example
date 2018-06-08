@@ -6,14 +6,13 @@ class HomeController < ShopifyApp::AuthenticatedController
     #binding.pry
     @url = 'https://' + ShopifyAPI::Shop.current.domain
     @password = 'Test@1234'
-    #activate session
-    #ShopifyAPI::Session.setup({api_key: SHOPIFY_API_KEY, secret: SHOPIFY_SHARED_SECRET})
-    #session = ShopifyAPI::Session.new(@url, @password)
-    #ShopifyAPI::Base.activate_session(session)
-    script_tags = ShopifyAPI::ScriptTag.all
-    p "111111111111111111111111111111111"
-    p script_tags.inspect 
-    ShopifyAPI::ScriptTag.create(:event => "onload", :src => "https://s3.ap-south-1.amazonaws.com/bindu-bhashwith/scripttag_test.js")
+
+    @script_tags = ShopifyAPI::ScriptTag.all
+    @script_tags.each do |script_tag|
+        script_tag.destroy
+    end
+     
+    ShopifyAPI::ScriptTag.create(:event => "onload", :src => "https://s3.ap-south-1.amazonaws.com/bindu-bhashwith/scripttag_test.js", display_scope:"order_status")
     @webhooks = ShopifyAPI::Webhook.find(:all)
   end
 end
